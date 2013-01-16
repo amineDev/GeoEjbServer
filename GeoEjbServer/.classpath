@@ -7,7 +7,6 @@
 	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.6.4.jar"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-5.0.5-bin.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="I:/amine/glassfish/glassfish3/glassfish/lib/javaee.jar"/>
 	<classpathentry kind="lib" path="lib/geolocLib/commons-httpclient-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/geolocLib/commons-lang-2.6.jar"/>
 	<classpathentry kind="lib" path="lib/geolocLib/commons-logging-1.1.1.jar"/>
