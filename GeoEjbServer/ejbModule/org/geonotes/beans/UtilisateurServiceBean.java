@@ -168,4 +168,23 @@ public class UtilisateurServiceBean implements UtilisateurServiceRemote, Utilisa
 
 
 
+	@Override
+	public String getTypeByEmail(String email) throws GeoNotesException {
+
+		String type = "";
+
+		try{
+			String q = "SELECT DTYPE FROM `users` WHERE email = '" + email+ "'";
+			Query query = entityManager.createNativeQuery(q);
+			type = query.getSingleResult().toString();		
+		}catch (PersistenceException e) {
+			logger.error("DB Exception",e);
+			throw new GeoNotesException("DB Exception ",e);
+		}
+
+		return type;
+	}
+
+
+
 }

@@ -71,4 +71,13 @@ public interface UtilisateurServiceRemote {
 	 * @throws GeoNotesException
 	 */
 	boolean mailExist(String email)throws GeoNotesException;
+	
+	
+	/**
+	 * Retourne le type du User(Utilisateur/Administrateur)
+	 * @param email
+	 * @return
+	 * @throws GeoNotesException
+	 */
+	String getTypeByEmail(String email)throws GeoNotesException;
 }

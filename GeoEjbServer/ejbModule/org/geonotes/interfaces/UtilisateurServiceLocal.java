@@ -20,42 +20,42 @@ public interface UtilisateurServiceLocal {
 	 * @return
 	 */
 	Utilisateur create(Utilisateur user)throws GeoNotesException;
-	
+
 	/**
 	 * Permet de mettre à jour un utilisateur
 	 * @param user
 	 * @return
 	 */
 	Utilisateur update(Utilisateur user)throws GeoNotesException;
-	
+
 	/**
 	 * Permet de supprimer un utilisateur
 	 * @param user
 	 */
 	void remove(Utilisateur user)throws GeoNotesException;
-	
+
 	/**
 	 * Retourne un utilisateur par son identifiant
 	 * @param id
 	 * @return
 	 */
 	Utilisateur findById(int id)throws GeoNotesException;
-	
+
 	/**
 	 * Retourne la liste de tous les utilisateurs
 	 * @return
 	 */
 	List<Utilisateur> getAll()throws GeoNotesException;
-	
-	
+
+
 	/**
 	 * Retourne un utilisateur par son email
 	 * @param email
 	 * @return
 	 */
 	Utilisateur findByEmail(String email)throws GeoNotesException;
-	
-	
+
+
 	/**
 	 * Permet de vérifier si le login d'un utilisateur est correcte ou non
 	 * Return True si email et password correct Sinn Return False 
@@ -64,7 +64,7 @@ public interface UtilisateurServiceLocal {
 	 * @return
 	 */
 	boolean login(String email,String password)throws GeoNotesException;
-	
+
 	/**
 	 * Permet de vérifier si l'email appartient deja à un Utilisateur
 	 * @param email
@@ -72,5 +72,13 @@ public interface UtilisateurServiceLocal {
 	 * @throws GeoNotesException
 	 */
 	boolean mailExist(String email)throws GeoNotesException;
-	
+
+	/**
+	 * Retourne le type du User(Utilisateur/Administrateur)
+	 * @param email
+	 * @return
+	 * @throws GeoNotesException
+	 */
+	String getTypeByEmail(String email)throws GeoNotesException;
+
 }
