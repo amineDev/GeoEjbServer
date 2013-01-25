@@ -7,7 +7,6 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 
 
@@ -58,7 +57,7 @@ public class ParcourServiceBean implements ParcourServiceRemote, ParcourServiceL
 		try{
 			logger.info("Création d'un Parcours");
 			return entityManager.merge(parcours);
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -70,7 +69,7 @@ public class ParcourServiceBean implements ParcourServiceRemote, ParcourServiceL
 		try{
 			logger.info("MAJ d'un Parcours");
 			return entityManager.merge(parcours);
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -82,7 +81,7 @@ public class ParcourServiceBean implements ParcourServiceRemote, ParcourServiceL
 		try{
 			logger.info("Suppression d'un Parcours");
 			entityManager.remove(parcours);
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -94,7 +93,7 @@ public class ParcourServiceBean implements ParcourServiceRemote, ParcourServiceL
 		try{
 			logger.info("Recherche d'un Parcours avec l'id : " + id);
 			return entityManager.find(Parcour.class, id);
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -111,7 +110,7 @@ public class ParcourServiceBean implements ParcourServiceRemote, ParcourServiceL
 			Query query = entityManager.createQuery(q);
 			List<Parcour> parcours = query.getResultList();
 			return parcours;
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -128,7 +127,7 @@ public class ParcourServiceBean implements ParcourServiceRemote, ParcourServiceL
 			Query query = entityManager.createNativeQuery(q);
 			nb = Integer.parseInt(query.getResultList().get(0).toString());
 			return nb;
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -146,10 +145,10 @@ public class ParcourServiceBean implements ParcourServiceRemote, ParcourServiceL
 					"SELECT p FROM " + Parcour.class.getSimpleName()+" p WHERE p.id = :id");
 			query.setParameter("id", IdParcour);
 			Parcour parcour = (Parcour) query.getSingleResult();
-			
+
 			users.addAll(parcour.getUtilisateurs());
 
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -163,31 +162,37 @@ public class ParcourServiceBean implements ParcourServiceRemote, ParcourServiceL
 	public List<Parcour> getParcourByLocalisationUser(Utilisateur utilisateur)
 	throws GeoNotesException {
 
-		//On récupère l'adresse de la position de l'utilisateur GPS
-		String Adresse = this.getAdress(utilisateur.getLatitude(), utilisateur.getLongitude());
+		try{
+			//On récupère l'adresse de la position de l'utilisateur GPS
+			String Adresse = this.getAdress(utilisateur.getLatitude(), utilisateur.getLongitude());
 
-		List<Parcour> resultat = new ArrayList<Parcour>();
+			List<Parcour> resultat = new ArrayList<Parcour>();
 
-		//On récupère la liste de tous les parcours
-		List<Parcour> parcours = this.getAll();
+			//On récupère la liste de tous les parcours
+			List<Parcour> parcours = this.getAll();
 
-		/*Pour chaque parcours on récupère ses Notes et on vérifie 
+			/*Pour chaque parcours on récupère ses Notes et on vérifie 
 		   si la ville correspond à l'adresse geolocalisé de l'utilisateur*/
-		for (Parcour parcour : parcours) {
-			List<Note> notes = new ArrayList<Note>();
-			notes.addAll(parcour.getNotes());
+			for (Parcour parcour : parcours) {
+				List<Note> notes = new ArrayList<Note>();
+				notes.addAll(parcour.getNotes());
 
-			for (Note note : notes) {			
-				/*Si la note se trouve dans la meme ville on ajoute 
+				for (Note note : notes) {			
+					/*Si la note se trouve dans la meme ville on ajoute 
             	 le parcours au liste de résultats*/
-				if(Adresse.contains(note.getVille())){
-					resultat.add(parcour);
-					break;
-				}           	 
+					if(Adresse.contains(note.getVille())){
+						resultat.add(parcour);
+						break;
+					}           	 
+				}
 			}
-		}
 
-		return resultat;
+			return resultat;
+
+		}catch (Throwable e) {
+			logger.error("DB Exception",e);
+			throw new GeoNotesException("DB Exception ",e);
+		}
 	}
 
 
@@ -197,63 +202,76 @@ public class ParcourServiceBean implements ParcourServiceRemote, ParcourServiceL
 	public List<Parcour> getParcourByLocalisation(double latitude,
 			double longitude) throws GeoNotesException {
 
-		//On récupère l'adresse des coordonnées GPS
-		String Adresse = this.getAdress(latitude,longitude);
+		try{
+			//On récupère l'adresse des coordonnées GPS
+			String Adresse = this.getAdress(latitude,longitude);
 
-		List<Parcour> resultat = new ArrayList<Parcour>();
+			List<Parcour> resultat = new ArrayList<Parcour>();
 
-		//On récupère la liste de tous les parcours
-		List<Parcour> parcours = this.getAll();
+			//On récupère la liste de tous les parcours
+			List<Parcour> parcours = this.getAll();
 
-		/*Pour chaque parcours on récupère ses Notes et on vérifie 
+			/*Pour chaque parcours on récupère ses Notes et on vérifie 
 		   si la ville correspond à l'adresse geolocalisé de l'utilisateur*/
-		for (Parcour parcour : parcours) {
-			List<Note> notes = new ArrayList<Note>();
-			notes.addAll(parcour.getNotes());
+			for (Parcour parcour : parcours) {
+				List<Note> notes = new ArrayList<Note>();
+				notes.addAll(parcour.getNotes());
 
-			for (Note note : notes) {			
-				/*Si la note se trouve dans la meme ville on ajoute 
+				for (Note note : notes) {			
+					/*Si la note se trouve dans la meme ville on ajoute 
             	 le parcours au liste de résultats*/
-				if(Adresse.contains(note.getVille())){
-					resultat.add(parcour);
-					break;
-				}           	 
+					if(Adresse.contains(note.getVille())){
+						resultat.add(parcour);
+						break;
+					}           	 
+				}
 			}
-		}
 
-		return resultat;
+			return resultat;
+
+		}catch (Throwable e) {
+			logger.error("DB Exception",e);
+			throw new GeoNotesException("DB Exception ",e);
+		}
 
 	}
 
 
 
 	@Override
-	public String getAdress(double latitude,double longitude){
+	public String getAdress(double latitude,double longitude)throws GeoNotesException{
 
-		String adresse = "";
-		Geocoder geocoder = new Geocoder();
-		GeocodeResponse geocoderResponse;
 
-		String lat = String.valueOf(latitude);
-		String lon = String.valueOf(longitude);
+		try{
+			String adresse = "";
+			Geocoder geocoder = new Geocoder();
+			GeocodeResponse geocoderResponse;
 
-		LatLng latLng = new LatLng(lat, lon);
+			String lat = String.valueOf(latitude);
+			String lon = String.valueOf(longitude);
 
-		GeocoderRequest geocoderRequest = new GeocoderRequest();
-		geocoderRequest.setLocation(latLng);
+			LatLng latLng = new LatLng(lat, lon);
 
-		geocoderResponse = geocoder.geocode(geocoderRequest);
+			GeocoderRequest geocoderRequest = new GeocoderRequest();
+			geocoderRequest.setLocation(latLng);
 
-		if(geocoderResponse.getResults().isEmpty()){
-			logger.error("Connot find Adresse of the postion " + latitude +"/"+longitude);
-		}else {
-			GeocoderResult geocoderResult = geocoderResponse.getResults().iterator().next();
+			geocoderResponse = geocoder.geocode(geocoderRequest);
 
-			adresse = geocoderResult.getFormattedAddress();
+			if(geocoderResponse.getResults().isEmpty()){
+				logger.error("Connot find Adresse of the postion " + latitude +"/"+longitude);
+			}else {
+				GeocoderResult geocoderResult = geocoderResponse.getResults().iterator().next();
 
+				adresse = geocoderResult.getFormattedAddress();
+
+			}
+
+			return adresse;		
+
+		}catch (Throwable e) {
+			logger.error("DB Exception",e);
+			throw new GeoNotesException("DB Exception ",e);
 		}
-
-		return adresse;		
 	}
 
 }

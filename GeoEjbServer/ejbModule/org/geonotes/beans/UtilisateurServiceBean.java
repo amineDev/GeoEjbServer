@@ -5,7 +5,6 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
@@ -47,7 +46,7 @@ public class UtilisateurServiceBean implements UtilisateurServiceRemote, Utilisa
 		try {
 			logger.info("Création d'un Utilisateur");
 			return entityManager.merge(user);
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -59,7 +58,7 @@ public class UtilisateurServiceBean implements UtilisateurServiceRemote, Utilisa
 		try{
 			logger.info("MAJ d'un Utilisateur");
 			return entityManager.merge(user);
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -71,7 +70,7 @@ public class UtilisateurServiceBean implements UtilisateurServiceRemote, Utilisa
 		try{
 			logger.info("Suppression d'un Utilisateur");
 			entityManager.remove(user);
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -84,7 +83,7 @@ public class UtilisateurServiceBean implements UtilisateurServiceRemote, Utilisa
 		try{
 			logger.info("Recherche de Utilisateur avec l'id : " + id);
 			return entityManager.find(Utilisateur.class, id);
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -102,7 +101,7 @@ public class UtilisateurServiceBean implements UtilisateurServiceRemote, Utilisa
 			Query query = entityManager.createQuery(q);
 			List<Utilisateur> users = query.getResultList();
 			return users;
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -118,7 +117,7 @@ public class UtilisateurServiceBean implements UtilisateurServiceRemote, Utilisa
 			TypedQuery<Utilisateur> query = entityManager.createQuery(
 					"SELECT u FROM Utilisateur u WHERE u.email = :email", Utilisateur.class);
 			return query.setParameter("email", email).getSingleResult();
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -139,7 +138,7 @@ public class UtilisateurServiceBean implements UtilisateurServiceRemote, Utilisa
 				value = true;
 			}
 			return value;
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -159,7 +158,7 @@ public class UtilisateurServiceBean implements UtilisateurServiceRemote, Utilisa
 				value = true;
 			}
 			return value;
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -177,7 +176,7 @@ public class UtilisateurServiceBean implements UtilisateurServiceRemote, Utilisa
 			String q = "SELECT DTYPE FROM `users` WHERE email = '" + email+ "'";
 			Query query = entityManager.createNativeQuery(q);
 			type = query.getSingleResult().toString();		
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}

@@ -95,5 +95,5 @@ public interface ParcourServiceLocal {
 	 * @param longitude
 	 * @return
 	 */
-	String getAdress(double latitude,double longitude);
+	String getAdress(double latitude,double longitude)throws GeoNotesException;
 }

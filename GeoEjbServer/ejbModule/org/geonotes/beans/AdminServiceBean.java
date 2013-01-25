@@ -6,7 +6,6 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
@@ -51,7 +50,7 @@ public class AdminServiceBean implements AdminServiceRemote, AdminServiceLocal {
 			logger.info("Création d'un administrateur");
 			return  entityManager.merge(admin);
 
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -65,7 +64,7 @@ public class AdminServiceBean implements AdminServiceRemote, AdminServiceLocal {
 		try{
 			logger.info("MAJ d'un administrateur");
 			return entityManager.merge(admin);
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -76,7 +75,7 @@ public class AdminServiceBean implements AdminServiceRemote, AdminServiceLocal {
 		try{
 			logger.info("Suppression  d'un administrateur");
 			entityManager.remove(admin);
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -88,7 +87,7 @@ public class AdminServiceBean implements AdminServiceRemote, AdminServiceLocal {
 		try{
 			logger.info("Recherche de l'administrateur avec id : " + id);
 			return entityManager.find(Administrateur.class, id);
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -106,7 +105,7 @@ public class AdminServiceBean implements AdminServiceRemote, AdminServiceLocal {
 			List<Administrateur> admins = query.getResultList();
 			return admins;
 
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -123,7 +122,7 @@ public class AdminServiceBean implements AdminServiceRemote, AdminServiceLocal {
 					"SELECT a FROM Administrateur a WHERE a.email = :email", Administrateur.class);
 			return query.setParameter("email", email).getSingleResult();
 
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -145,7 +144,7 @@ public class AdminServiceBean implements AdminServiceRemote, AdminServiceLocal {
 			}
 			return value;
 
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -166,7 +165,7 @@ public class AdminServiceBean implements AdminServiceRemote, AdminServiceLocal {
 			}
 			return value;
 
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}

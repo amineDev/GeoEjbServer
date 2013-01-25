@@ -5,7 +5,6 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 
 import org.geonotes.entities.Categorie;
@@ -51,7 +50,7 @@ public class CategorieServiceBean implements CategorieServiceRemote, CategorieSe
 		try{
 			logger.info("Création d'une Categorie");
 			return entityManager.merge(categorie);
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -64,7 +63,7 @@ public class CategorieServiceBean implements CategorieServiceRemote, CategorieSe
 		try{
 			logger.info("MAJ d'une Categorie");
 			return entityManager.merge(categorie);
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -77,7 +76,7 @@ public class CategorieServiceBean implements CategorieServiceRemote, CategorieSe
 		try{
 			logger.info("Suppression d'une Categorie");
 			entityManager.remove(categorie);
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -91,7 +90,7 @@ public class CategorieServiceBean implements CategorieServiceRemote, CategorieSe
 		try{
 			logger.info("Recherche de la Catégorie avec l'id : " + id);
 			return entityManager.find(Categorie.class, id);
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -108,7 +107,7 @@ public class CategorieServiceBean implements CategorieServiceRemote, CategorieSe
 			Query query = entityManager.createQuery(q);
 			List<Categorie> cat = query.getResultList();
 			return cat;
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}

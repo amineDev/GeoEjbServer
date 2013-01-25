@@ -6,7 +6,6 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 
 
@@ -49,7 +48,7 @@ public class NoteServiceBean implements NoteServiceRemote, NoteServiceLocal {
 		try{
 			logger.info("Création d'une Note");
 			return entityManager.merge(note);
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -61,7 +60,7 @@ public class NoteServiceBean implements NoteServiceRemote, NoteServiceLocal {
 		try{
 			logger.info("MAJ d'une Note");
 			return entityManager.merge(note);
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -73,7 +72,7 @@ public class NoteServiceBean implements NoteServiceRemote, NoteServiceLocal {
 		try{
 			logger.info("Suppression d'une Note");
 			entityManager.remove(note);
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -86,7 +85,7 @@ public class NoteServiceBean implements NoteServiceRemote, NoteServiceLocal {
 		try{
 			logger.info("Recherche de la Note avec l'id : " + id);
 			return entityManager.find(Note.class, id);
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}
@@ -102,7 +101,7 @@ public class NoteServiceBean implements NoteServiceRemote, NoteServiceLocal {
 			Query query = entityManager.createQuery(q);
 			List<Note> notes = query.getResultList();
 			return notes;
-		}catch (PersistenceException e) {
+		}catch (Throwable e) {
 			logger.error("DB Exception",e);
 			throw new GeoNotesException("DB Exception ",e);
 		}

@@ -13,5 +13,6 @@
 	<classpathentry kind="lib" path="lib/geolocLib/geocoder-java-0.11.jar"/>
 	<classpathentry kind="lib" path="lib/geolocLib/gson-2.2.2.jar"/>
 	<classpathentry kind="lib" path="lib/geolocLib/poi-3.9.jar"/>
+	<classpathentry kind="lib" path="I:/amine/glassfish/glassfish3/glassfish/lib/javaee.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

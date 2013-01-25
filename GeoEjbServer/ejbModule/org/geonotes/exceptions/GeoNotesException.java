@@ -12,8 +12,8 @@ import javax.ejb.ApplicationException;
  * Class qui permet de gérer des exceptions personnalisé de GeoNotes application
  *
  */
-@ApplicationException
-public class GeoNotesException extends Exception {
+@ApplicationException(rollback = true)
+public class GeoNotesException extends RuntimeException {
 
 	/**
 	 * 
@@ -41,8 +41,8 @@ public class GeoNotesException extends Exception {
 	 * @param msg
 	 * @param e
 	 */
-	public GeoNotesException(String msg,Exception e) {
-		super(msg,e);
+	public GeoNotesException(String msg,Throwable cause) {
+		super(msg,cause);
 	}
 
 }
